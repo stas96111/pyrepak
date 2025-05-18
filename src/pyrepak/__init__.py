@@ -5,9 +5,7 @@ from cffi import FFI
 
 ffi = FFI()
 
-# Define the C interface that matches your Rust FFI definitions
 ffi.cdef("""
-    // Enum definitions (you may need to adjust these based on the actual definitions)
     typedef enum {
         NONE = 0,
         ZLIB = 1,
@@ -24,7 +22,7 @@ ffi.cdef("""
         V6 = 6,
         V7 = 7,
         V8A = 8,
-        V8B = 9,
+        V8B = 9
         V9 = 10,
         V10 = 11,
         V11 = 12,
@@ -331,6 +329,8 @@ class PakReader:
         lib.pak_drop_files(files_ptr, length_ptr[0])
         return files
 
+
+
 class PakWriter:
     def __init__(self, writer_ptr):
         self.writer = writer_ptr
@@ -357,6 +357,7 @@ class PakWriter:
             raise RuntimeError("Failed to write index")
         self.writer = ffi.NULL  # Writer is consumed after write_index
         return True
+
 
 # Constants
 class Compression:
