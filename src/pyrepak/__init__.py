@@ -23,10 +23,11 @@ ffi.cdef("""
         V5 = 5,
         V6 = 6,
         V7 = 7,
-        V8 = 8,
-        V9 = 9,
-        V10 = 10,
-        V11 = 11,
+        V8A = 8,
+        V8B = 9,
+        V9 = 10,
+        V10 = 11,
+        V11 = 12,
     } Version;
 
     // Callback structure
@@ -58,25 +59,9 @@ ffi.cdef("""
     int pak_writer_write_index(void* writer);
 """)
 
-# Find the compiled Rust library
-def find_library():
-    # Adjust these paths based on your project structure
-    possible_paths = [
-        os.path.join(os.path.dirname(__file__), "target/release/librepak_ffi.so"),  # Linux
-        os.path.join(os.path.dirname(__file__), "target/release/librepak_ffi.dylib"),  # macOS
-        os.path.join(os.path.dirname(__file__), "target\\release\\repak_ffi.dll"),  # Windows
-    ]
-    for path in possible_paths:
-        if os.path.exists(path):
-            return path
-    raise FileNotFoundError("Could not find the compiled Rust library. Make sure to build it first.")
-
-try:
-    lib_path = r"C:\Users\Stas\Documents\GitHub\uelm\src\uelm\pak\repak_bind.dll"
-    lib = ffi.dlopen(lib_path)
-except Exception as e:
-    print(f"Error loading library: {e}")
-    sys.exit(1)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+lib_path = os.path.join(script_dir, 'repak_bind.dll')
+lib = ffi.dlopen(lib_path)
 
 # Define Python wrapper classes
 class RepakStream:
@@ -346,8 +331,6 @@ class PakReader:
         lib.pak_drop_files(files_ptr, length_ptr[0])
         return files
 
-
-
 class PakWriter:
     def __init__(self, writer_ptr):
         self.writer = writer_ptr
@@ -374,7 +357,6 @@ class PakWriter:
             raise RuntimeError("Failed to write index")
         self.writer = ffi.NULL  # Writer is consumed after write_index
         return True
-
 
 # Constants
 class Compression:
