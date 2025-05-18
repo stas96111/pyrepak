@@ -1,3 +1,5 @@
 pr/
 
 __pycache__
+dist/
+*.egg-info
